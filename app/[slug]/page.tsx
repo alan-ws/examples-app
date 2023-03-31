@@ -38,6 +38,6 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const blogData = await fetchBlog("5");
-  if (blogData.status === 500) notFound();
-  return <main>SLUG: {params.slug}</main>;
+  if (blogData.status === 404) notFound();
+  return <main>SLUG: {(await blogData.json()).title}</main>;
 }
