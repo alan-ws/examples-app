@@ -16,24 +16,20 @@ const fetchBlog = async (id: string) => {
 
 export async function generateStaticParams() {
   const blogs = await (await fetchBlogs()).json();
-  let notFounds = false;
 
   const slugs = blogs.map(
     (blog: { title: string; id: string }, ind: number) => {
-      if (blog.id.match("4")) notFounds = true;
       return {
         slug: blog.title,
       };
     }
   );
 
-  if (notFounds) notFound();
-
   return slugs;
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const blogData = await fetchBlog("5");
-  if (blogData.status === 500) notFound();
+  if (blogData.status === 404) notFound();
   return <main>SLUG: {params.slug}</main>;
 }
