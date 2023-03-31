@@ -8,12 +8,10 @@ const fetchBlogs = async () => {
 
 export async function generateStaticParams() {
   const posts = await fetchBlogs();
-
-  if (posts.ok) notFound();
-
   return [{ slug: "post-1" }];
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  if (!params.slug.match("post-1")) notFound();
   return <main>SLUG: {params.slug}</main>;
 }
