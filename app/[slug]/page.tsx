@@ -16,9 +16,20 @@ const fetchBlog = async (id: string) => {
 
 export async function generateStaticParams() {
   const blogs = await (await fetchBlogs()).json();
-  return blogs.map((blog: { title: string }, ind: number) => ({
-    slug: blog.title,
-  }));
+  let notFounds = false;
+
+  const slugs = blogs.map(
+    (blog: { title: string; id: string }, ind: number) => {
+      if (blog.id.match("4")) notFounds = true;
+      return {
+        slug: blog.title,
+      };
+    }
+  );
+
+  if (notFounds) notFound();
+
+  return slugs;
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
